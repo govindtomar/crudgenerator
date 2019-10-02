@@ -22,3 +22,10 @@ class CrudGeneratorServiceProvider extends ServiceProvider
 
 	}
 }
+
+    // "autoload-dev": {
+    //     "psr-4": {
+    //         "Tests\\": "tests/",
+    //         "GovindTomar\\CrudGenerator\\": "package/govindtomar/crudgenerator/src/"
+    //     }
+    // },
