@@ -1,0 +1,24 @@
+                    					</tbody>
+                        			</table>
+                                    <div class="show-page-action action-form">
+                                        <li>
+                                            <a href="{{ url($user_role.'/{{address}}/edit/'. ${{modelNameSingularVar}}->id) }}" class="btn btn-success btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                        </li>
+                                        <li>
+                                            <form id="back-delete-form" action="{{ url($user_role.'/{{address}}/delete', [${{modelNameSingularVar}}->id]) }}" method="POST">
+                                                @csrf
+                                                {{method_field('DELETE')}}
+                                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
+                                            </form>
+                                        </li>
+                                    </div>
+                        		</div>
+                        	</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>
+@endsection

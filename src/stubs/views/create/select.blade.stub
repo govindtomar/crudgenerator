@@ -1,0 +1,11 @@
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{fieldNameSigularVar}}_id" class="col-form-label">{{ __('{{inputNameLabel}}') }}</label>
+                                    <select class="form-control" id="{{fieldNameSigularVar}}_id" name="{{fieldNameSigularVar}}_id">
+                                        <option value="0" selected="selected" disabled="disabled">Select {{inputNameLabel}}</option>
+                                        @foreach(${{fieldNamePluralVar}} as $key => ${{fieldNameSigularVar}})
+                                            <option value="{{ ${{fieldNameSigularVar}}->id }}">{{ ${{fieldNameSigularVar}}->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>

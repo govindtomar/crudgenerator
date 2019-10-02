@@ -1,0 +1,6 @@
+							<div class="col-md-6">
+                                <div class="form-group">
+							        <label for="{{fieldNameSigularVar}}" class="col-form-label">{{ __('{{inputNameLabel}}') }}</label>
+							        <input id="{{fieldNameSigularVar}}" type="{{type}}" class="form-control" name="{{fieldNameSigularVar}}" value="{{ old('{{fieldNameSigularVar}}') }}" >
+							    </div>
+							</div>

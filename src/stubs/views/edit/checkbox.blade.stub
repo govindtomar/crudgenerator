@@ -1,0 +1,8 @@
+							<div class="col-md-6">
+								<div class="form-group">
+								    <label for="{{fieldNameSigularVar}}" class="col-form-label">{{ __('{{inputNameLabel}}') }}</label>							    
+							        <div class="fancy-checkbox">
+							            <label><input type="{{type}}" id="{{fieldNameSigularVar}}" name="{{fieldNameSigularVar}}" value="{{ ${{modelNameSingularVar}}->{{fieldNameSigularVar}} }}"><span>Checkbox Demo</span></label>
+							        </div>        
+							    </div>
+							</div>

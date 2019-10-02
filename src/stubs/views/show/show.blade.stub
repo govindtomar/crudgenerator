@@ -1,0 +1,4 @@
+                                            <tr>                            
+                                                <th>{{inputNameLabel}}</th>
+                                                <td>{{ ${{modelNameSingularVar}}->{{fieldNameSigularVar}} }}</td>
+                                            </tr> 

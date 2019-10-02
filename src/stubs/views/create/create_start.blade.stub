@@ -1,0 +1,17 @@
+@extends('layouts.backend')
+
+
+@section('content')
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h3 class="text-center mt-4">Create New {{modelNameSigularUpperCase}}</h3>
+                    <hr class="h3-bottom-hr">
+                </div>
+                <div class="body">
+                    @include('back.includes.flash-messages')
+                    <form method="POST" action="{{ url('/{{address}}/create') }}">
+                        <div class="row">
+                            @csrf

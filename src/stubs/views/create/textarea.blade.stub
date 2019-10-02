@@ -1,0 +1,6 @@
+                            <div class="col-md-12">
+                                <div class="form-group">
+							        <label for="{{fieldNameSigularVar}}" class="col-md-4 col-form-label">{{ __('{{inputNameLabel}}') }}</label>
+							    	<textarea id="{{fieldNameSigularVar}}" class="form-control" name="{{fieldNameSigularVar}}" rows="5" cols="30">{{ old('{{fieldNameSigularVar}}') }}</textarea>
+							    </div>
+							</div>
