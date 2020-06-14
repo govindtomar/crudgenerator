@@ -1,4 +1,4 @@
-                            <div class="col-md-6">
+                            <div class="{{formColClass}}">
                                 <div class="form-group">
                                     <label for="{{fieldNameSigularVar}}" class="col-form-label">{{ __('{{inputNameLabel}}') }}</label>
                                     <div class="fancy-radio">

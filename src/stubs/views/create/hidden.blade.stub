@@ -1,2 +1,1 @@
 							<input id="{{fieldNameSigularVar}}" type="{{type}}" class="form-control" name="{{fieldNameSigularVar}}" value="{{ ${{modelNameSingularVar}}->{{fieldNameSigularVar}} }}" >
-							

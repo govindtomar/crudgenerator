@@ -1,7 +1,7 @@
-                            <div class="col-md-6">
+                            <div class="{{formColClass}}">
                                 <div class="form-group">
-                                    <label for="{{fieldNameSigularVar}}_id" class="col-md-4 col-form-label">{{ __('{{inputNameLabel}}') }}</label>
-                                    <select class="form-control" id="{{fieldNameSigularVar}}_id" name="{{fieldNameSigularVar}}_id">
+                                    <label for="{{fieldNameSigularVar}}_id" class="col-form-label">{{ __('{{inputNameLabel}}') }}</label>
+                                    <select class="form-control single-select @error('{{fieldNameSigularVar}}') is-invalid @enderror" id="{{fieldNameSigularVar}}_id" name="{{fieldNameSigularVar}}_id">
                                         <option value="0" selected="selected" disabled="disabled">Select {{inputNameLabel}}</option>
                                         @foreach(${{fieldNamePluralVar}} as $key => ${{fieldNameSigularVar}})
                                             @if(${{fieldNameSigularVar}}->id == ${{modelNameSingularVar}}->{{fieldNameSigularVar}}_id)
@@ -11,5 +11,10 @@
                                             @endif
                                         @endforeach
                                     </select>
+                                    @error('{{fieldNameSigularVar}}')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>

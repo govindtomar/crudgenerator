@@ -3,7 +3,7 @@
 namespace GovindTomar\CrudGenerator;
 
 use Illuminate\Support\ServiceProvider;
-use GovindTomar\CrudGenerator\Commands\BackendCrudGenerator;
+use GovindTomar\CrudGenerator\Commands\AdminCrudGenerator;
 
 class CrudGeneratorServiceProvider extends ServiceProvider
 {
@@ -12,7 +12,7 @@ class CrudGeneratorServiceProvider extends ServiceProvider
         // $this->loadViewsFrom(__DIR__.'views', 'contact');
         if ($this->app->runningInConsole()) {
             $this->commands([
-                BackendCrudGenerator::class,
+                AdminCrudGenerator::class,
                 // BarCommand::class,
             ]);
         }

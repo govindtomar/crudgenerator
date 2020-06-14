@@ -1,18 +1,13 @@
-@extends('layouts.back')
+@extends('{{layout}}')
+
 
 @section('content')
-<div class="container">
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="header">
-                        <h3 class="text-center mt-4">Show {{modelNameSigularUpperCase}}</h3>
-                        <hr class="h3-bottom-hr">
-                    </div>
-                    <div class="body">
-                        @include('backend.includes.flash-messages')
-                        <div class="row">
-                            <div class="col-md-8 offset-md-2">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered">
-                                        <tbody>
+<div class="container-fluid">
+    <div class="row">
+        <div class="{{bodyColClass}}">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Show {{modelNameSigularUpperCase}}</h4>
+                    <a href="{{ url('{{path}}{{forslash}}{{address}}') }}" class="btn btn-primary float-right">View All {{modelNamePluralUpperCase}}</a>
+                </div>
+                <div class="card-body">                        

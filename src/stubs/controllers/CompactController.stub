@@ -1,117 +1,88 @@
 <?php
-namespace App\Http\Controllers\Backend;
+namespace App\Http\Controllers{{backslash}}{{namespace}};
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\{{modelName}}Request;
 use App\Models\{{modelName}};
-use DB;
-
+{{relativeModel}}
 
 class {{modelName}}Controller extends Controller
 {
     public function index()
     {
         try{
-            ${{modelNamePluralVar}}  = DB::table('{{tableName}}')
-            {{joinSelectTables}}
-            {{indexJoinTables}}
-            ->orderBy('id', 'desc')
-            ->paginate(20);
-            return view("backend/{{address}}/index", compact("{{modelNamePluralVar}}"));
+            ${{modelNamePluralVar}}  = {{modelName}}::with({{indexWithModel}})->paginate(20);
+            return view("{{path}}{{forslash}}{{address}}/index", compact("{{modelNamePluralVar}}"));
         }catch(\Exception $e){
-
             return back();
         }
     }
+
     public function create()
     {
         try{
             {{extraTables}}
-            return view("backend/{{address}}/create", compact({{getCompact}}));
+            return view("{{path}}{{forslash}}{{address}}/create", compact({{getCompact}}));
         }catch(\Exception $e){
-
             return back();
         }
     }
-    public function store(Request $request, $role)
+
+    public function store({{modelName}}Request $request)
     {
-        try{
-            $this->validate($request, [
-                {{controllerValidation}}
-            ]);
-            ${{modelNameSingularVar}} = DB::table('{{tableName}}')->insertGetId([
-                    {{createControllerFields}}
-                    'created_at'        =>      \Carbon\Carbon::now()->toDateTimeString(),
-                    'updated_at'        =>      \Carbon\Carbon::now()->toDateTimeString(),
-                ]
-            );
+        try{            
+            ${{modelNameSingularVar}} = {{modelName}}::create($request->all());
             return back()->with('success','You have successfully inserted new {{modelNameSingularLowerCase}}');
         }catch(\Exception $e){
-
             return back()->with('error','Your record has been not submitted successfully ');
         }
     }
-    public function show($role, $id)
+
+    public function show($id)
     {
         try{
-            ${{modelNameSingularVar}} = DB::table('{{tableName}}')
-            {{joinSelectTables}}
-            {{indexJoinTables}}
-            ->where('{{tableName}}.id', $id)
-            ->first();
-            return view("backend/{{address}}/show", compact("{{modelNameSingularVar}}"));
+            ${{modelNameSingularVar}} = {{modelName}}::find($id);
+            return view("{{path}}{{forslash}}{{address}}/show", compact("{{modelNameSingularVar}}"));
         }catch(\Exception $e){
-
             return back();
         }
     }
-    public function edit($role, $id)
+
+    public function edit($id)
     {
         try{
-
             {{extraTables}}
-            ${{modelNameSingularVar}} =  DB::table('{{tableName}}')
-            ->where('{{tableName}}.id', $id)
-            ->first();
-            return view("backend/{{address}}/edit", compact("{{modelNameSingularVar}}", {{getCompact}}));
+            ${{modelNameSingularVar}} =  {{modelName}}::find($id);
+            return view("{{path}}{{forslash}}{{address}}/edit", compact("{{modelNameSingularVar}}", {{getCompact}}));
         }catch(\Exception $e){
-
             return back();
         }
 
     }
-    public function update(Request $request, $role)
+
+    public function update({{modelName}}Request $request)
     {
         try{
-            $this->validate($request, [
-                'id'  =>  'required',
-                {{controllerValidation}}
-            ]);
+            ${{modelNameSingularVar}} =  {{modelName}}::find($request->id);
+            {{createControllerFields}}
+            ${{modelNameSingularVar}}->save();
 
-            ${{modelNameSingularVar}} =  DB::table('{{tableName}}')
-            ->where('id', $request->id)
-            ->update([
-                {{createControllerFields}}
-                'updated_at'        =>      \Carbon\Carbon::now()->toDateTimeString(),
-            ]);
             return back()->with('success','You have successfully updated {{modelNameSingularLowerCase}}');
         }catch(\Exception $e){
-
             return back()->with('error','Your record has been not updated successfully');
         }
     }
-    public function destroy($role, $id)
+
+    public function destroy($id)
     {
         try{
-
-            DB::table('{{tableName}}')->where('id', '=', $id)->delete();
-            return redirect("admin/{{address}}")->with('success','Successfully delete {{modelNameSingularLowerCase}}');
-
+            {{modelName}}::find($id)->delete();
+            return redirect("{{path}}{{forslash}}{{address}}")->with('success','Successfully delete {{modelNameSingularLowerCase}}');
         }catch(\Exception $e){
-
             return back()->with('error','{{modelNameSingularLowerCase}} was delete');
         }
-
-
     }
+
+    
 }
