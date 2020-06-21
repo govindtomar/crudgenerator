@@ -1,0 +1,64 @@
+@extends('{{layout}}')
+
+
+@section('content')
+<div class="container-fluid">
+    <div class="row">
+        <div class="{{bodyColClass}}">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">{{modelNamePluralUpperCase}}</h4>
+                    <a href="{{ url('{{path}}{{forslash}}{{address}}/create') }}" class="btn btn-primary float-right">+ Add {{modelNameSigularUpperCase}}</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>#</th>
+                                    {{tableHeadFields}}
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $table_counter = 1;
+                                @endphp
+                                @foreach (${{modelNamePluralVar}} as ${{modelNameSingularVar}})
+                                    <tr>
+                                        <th>{{ $table_counter }}</th>
+                                        {{tableBodyFields}}
+                                        <td>
+                                            <ul style="display: inline-flex;">
+                                                <li>
+                                                    <a href="{{ url('{{path}}{{forslash}}{{address}}/'. ${{modelNameSingularVar}}->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ url('{{path}}{{forslash}}{{address}}/'. ${{modelNameSingularVar}}->id.'/edit') }}" class="btn btn-success btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                                </li>
+                                                <li>
+                                                    <form id="back-delete-form" action="{{ url('{{path}}{{forslash}}{{address}}', [${{modelNameSingularVar}}->id]) }}" method="POST">
+                                                      @csrf
+                                                      {{method_field('DELETE')}}
+                                                      <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        @php
+                                            $table_counter = $table_counter + 1 ;
+                                        @endphp
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <div class="index-pagination">
+                            {{ ${{modelNamePluralVar}}->links() }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

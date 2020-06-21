@@ -1,0 +1,13 @@
+                            <div class="{{formColClass}}">
+                                <div class="form-group">
+							        <label for="{{fieldNameSigularVar}}" class="col-form-label">{{ __('{{inputNameLabel}}') }}</label>
+							        <div class="fancy-checkbox @error('{{fieldNameSigularVar}}') is-invalid @enderror">
+							            <label><input type="{{type}}" id="{{fieldNameSigularVar}}" name="{{fieldNameSigularVar}}" value=""><span>Checkbox Demo</span></label>
+							        </div>
+							        @error('{{fieldNameSigularVar}}')
+		                                <span class="invalid-feedback" role="alert">
+		                                    <strong>{{ $message }}</strong>
+		                                </span>
+		                            @enderror
+							    </div>
+							</div>

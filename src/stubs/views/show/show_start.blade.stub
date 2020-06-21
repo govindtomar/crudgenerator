@@ -1,0 +1,13 @@
+@extends('{{layout}}')
+
+
+@section('content')
+<div class="container-fluid">
+    <div class="row">
+        <div class="{{bodyColClass}}">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Show {{modelNameSigularUpperCase}}</h4>
+                    <a href="{{ url('{{path}}{{forslash}}{{address}}') }}" class="btn btn-primary float-right">View All {{modelNamePluralUpperCase}}</a>
+                </div>
+                <div class="card-body">                        
