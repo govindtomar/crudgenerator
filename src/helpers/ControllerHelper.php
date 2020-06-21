@@ -100,9 +100,9 @@ class ControllerHelper{
         foreach ($fields as $field) {
             $var = explode('*', $field);
             if ($var[0] == 'select') {
-                $field_name .= '_____'.Helper::modelNameSingularLowerCase($name)."->".$var[1]."_id  =  _____request->{$var[1]}_id;\n\t\t\t";
+                $field_name .= '_____'.Helper::modelNameSingularVar($name)."->".$var[1]."_id  =  _____request->{$var[1]}_id;\n\t\t\t";
             }else{
-               $field_name .= '_____'.Helper::modelNameSingularLowerCase($name)."->".$var[1]."  =  _____request->$var[1];\n\t\t\t";
+               $field_name .= '_____'.Helper::modelNameSingularVar($name)."->".$var[1]."  =  _____request->$var[1];\n\t\t\t";
             }
 
         }

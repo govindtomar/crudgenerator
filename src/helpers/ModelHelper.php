@@ -43,7 +43,7 @@ class ModelHelper{
             $tables = explode(',', $tables);
             $relation = '';
             foreach ($tables as $key => $table) {
-                $relation .= "public function ". Helper::modelNameSingularLowerCase($table)."(){\n\t\t"."return _____this->belongsTo({$table}::class);\n\t"."}";
+                $relation .= "public function ". Helper::modelNameSingularVar($table)."(){\n\t\t"."return _____this->belongsTo({$table}::class);\n\t"."}";
             }
         return str_replace('_____', '$', $relation);
         }
@@ -69,7 +69,7 @@ class ModelHelper{
 
     public static function relation_model($name, $table){
         
-        $relation = "\tpublic function ". Helper::modelNamePluralLowerCase($name)."(){\n\t\t"."return _____this->hasMany({$name}::class);\n\t"."}\n\n}";
+        $relation = "\tpublic function ". Helper::modelNamePluralVar($name)."(){\n\t\t"."return _____this->hasMany({$name}::class);\n\t"."}\n\n}";
 
         $content = str_replace('_____', '$', $relation);
         // dd(app_path("Models/{$table}.php"));

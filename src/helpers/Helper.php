@@ -15,30 +15,30 @@ class Helper{
     }
 
     public static function layout(){
-        return config('crudgenerator.layout');
+        return config('crud.layout');
         // return 'layouts.admin.app';
     }
 
     public static function path(){
-        return config('crudgenerator.path');
+        return config('crud.path');
         // return 'admin';
     }
 
     public static function namespace(){
-        return config('crudgenerator.namespace');
+        return config('crud.namespace');
         // return 'Admin';
     }
 
     public static function backslash(){
-        if (config('crudgenerator.backslash') != '') {
-            return explode('"', config('crudgenerator.backslash'))[0];            
+        if (config('crud.backslash') != '') {
+            return explode('"', config('crud.backslash'))[0];            
         }else{
             return '';
         }
     }
 
     public static function forslash(){
-        return config('crudgenerator.forslash');
+        return config('crud.forslash');
     }
 
     public static function bodyColClass(){
