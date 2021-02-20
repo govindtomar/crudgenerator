@@ -16,18 +16,22 @@ class Helper{
 
     public static function code_type(){
         return config('crud.code_type');
+        // return 'layouts.admin.app';
     }
 
     public static function layout(){
         return config('crud.layout');
+        // return 'layouts.admin.app';
     }
 
     public static function path(){
         return config('crud.path');
+        // return 'admin';
     }
 
     public static function namespace(){
         return config('crud.namespace');
+        // return 'Admin';
     }
 
     public static function backslash(){
