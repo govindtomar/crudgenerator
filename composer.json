@@ -1,0 +1,26 @@
+{
+    "name": "govindtomar/crudgenerator",
+    "description": "Laravel crud generator",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "govindtomar",
+            "email": "govindtomar01@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "GovindTomar\\CrudGenerator\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "GovindTomar\\CrudGenerator\\CrudGeneratorServiceProvider"
+            ]
+        }
+    }
+}

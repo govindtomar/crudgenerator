@@ -1,0 +1,7 @@
+					<div class="form-group mt-4">
+                        <div class="upload-image-div">
+                            <label class="w-100">
+                                <img class="w-100 upload-img-output" src="{{ asset(${{modelNameSingularVar}}->{{fieldNameSigularVar}}) }}">
+                            </label>
+                        </div>
+                    </div>
