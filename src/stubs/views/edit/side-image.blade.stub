@@ -1,9 +1,0 @@
-					<div class="form-group mt-4">
-                        <div class="upload-image-div">
-                            <label class="w-100">
-                                <img class="w-100 upload-img-output" src="{{ asset(${{modelNameSingularVar}}->{{fieldNameSigularVar}}) }}">
-                                <input type="file" class="get-upload-img d-none">
-                                <input type="hidden" name="{{fieldNameSigularVar}}" class="update-upload-img" form="{{address}}-form-submit">
-                            </label>
-                        </div>
-                    </div>
