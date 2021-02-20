@@ -120,7 +120,7 @@ class AdminCrudGenerator extends Command
             "\n\n // $name Controller Routes \n");
 
         File::append($route_page, 
-            "Route::group(['prefix' => '".Helper::path()."', 'as' => '".Helper::path().".', 'namespace' => '".Helper::namespace()."', 'middleware' => 'permission'], function(){\n");
+            "Route::group(['prefix' => '".Helper::path()."', 'as' => '".Helper::path().".', 'namespace' => '".Helper::namespace()."'], function(){\n");
 
         File::append($route_page, 
             "\tRoute::resource('".Helper::getAddress($name)."', '".$name."Controller');\n");
@@ -166,7 +166,7 @@ class AdminCrudGenerator extends Command
             "\n\n // $name Controller Routes \n");
 
         File::append($route_page, 
-            "Route::group(['prefix' => '".Helper::path()."', 'as' => '".Helper::path().".', 'namespace' => '".Helper::namespace()."', 'middleware' => 'permission'], function(){\n");
+            "Route::group(['prefix' => '".Helper::path()."', 'as' => '".Helper::path().".', 'namespace' => '".Helper::namespace()."'], function(){\n");
 
         File::append($route_page, 
             "\tRoute::resource('".Helper::getAddress($name)."', '".$name."Controller');\n");
