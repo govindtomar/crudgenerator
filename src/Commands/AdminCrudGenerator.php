@@ -119,16 +119,21 @@ class AdminCrudGenerator extends Command
         File::append(base_path('routes/web.php'), 
             "\n\n // $name Controller Routes \n");
 
-        File::append($route_page, 
-            "Route::group(['prefix' => '".Helper::path()."', 'as' => '".Helper::path().".', 'namespace' => '".Helper::namespace()."'], function(){\n");
+
+        // use App\Http\Controllers\Admin\PostController;
 
         File::append($route_page, 
-            "\tRoute::resource('".Helper::getAddress($name)."', '".$name."Controller');\n");
+            "use App\Http\Controllers".Helper::backslash().Helper::namespace().Helper::backslash().$name."Controller;\n");
+        File::append($route_page, 
+            "Route::group(['prefix' => '".Helper::path()."', 'as' => '".Helper::path().".'], function(){\n");
+
+        File::append($route_page, 
+            "\tRoute::resource('".Helper::getAddress($name)."', ".$name."Controller::class);\n");
         $fields = explode(',', $fields);
         foreach ($fields as $field) {
             $var = explode('*', $field);
             if($var[0] == 'toggle'){
-                File::append($route_page, "\tRoute::post('".Helper::getAddress($name)."/".$var[1]."', '".$name."Controller@".$var[1]."')->name('".Helper::getAddress($name).".".$var[1]."');\n");
+                File::append($route_page, "\tRoute::post('".Helper::getAddress($name)."/".$var[1]."', [".$name."Controller::class, '".$var[1]."'])->name('".Helper::getAddress($name).".".$var[1]."');\n");
             }
         }
         File::append($route_page, 
