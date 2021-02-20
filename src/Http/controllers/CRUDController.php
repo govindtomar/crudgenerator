@@ -15,6 +15,7 @@ class CRUDController extends Controller
         if(!file_exists(public_path(config('crud.trash_path')))){
             mkdir(public_path(config('crud.trash_path')));
         }
+        
         $image_data = $request->image;
         $image_array_1 = explode(";", $image_data);
         $image_array_2 = explode(",", $image_array_1[1]);
