@@ -1,3 +1,0 @@
-										<td scope="col" style="padding-top:5px;padding-bottom:5px;">
-                                            <img style="width:40px;" src="{{ asset(${{modelNameSingularVar}}->{{fieldNameSigularVar}}) }}" />
-                                        </td>
