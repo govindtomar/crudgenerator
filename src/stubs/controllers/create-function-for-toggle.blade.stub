@@ -1,0 +1,7 @@
+	public function {{fieldNameSigularVar}}(Request $request){
+		${{modelNameSingularVar}} = {{name}}::find($request->id);
+		${{modelNameSingularVar}}->{{fieldNameSigularVar}} = $request->{{fieldNameSigularVar}} == 'true' ? true : false;
+		${{modelNameSingularVar}}->save();
+		return ${{modelNameSingularVar}};
+	}
+

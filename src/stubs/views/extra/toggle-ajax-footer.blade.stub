@@ -1,0 +1,17 @@
+    function change__toggle(data, isThis){
+        if (data.status == true || data.status == false) {
+        }else{
+            if (jQuery(isThis).parents('.btn.toggle').attr('class') == 'toggle btn btn-xs btn-success') {
+                jQuery(isThis).parents('.btn.toggle').removeClass('btn-success');
+                jQuery(isThis).parents('.btn.toggle').addClass('btn-danger off');
+            }
+            else if(jQuery(isThis).parents('.btn.toggle').attr('class') == 'toggle btn btn-xs btn-danger off'){
+                jQuery(isThis).parents('.btn.toggle').removeClass('btn-danger off');
+                jQuery(isThis).parents('.btn.toggle').addClass('btn-success');
+            }
+            $(isThis).bootstrapToggle('disable')
+        }
+    }
+});
+</script>
+@endsection
