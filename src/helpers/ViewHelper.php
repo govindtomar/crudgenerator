@@ -42,7 +42,8 @@ class ViewHelper{
                 '{{layout}}',
                 '{{bodyColClass}}',
                 '{{path}}',
-                '{{forslash}}'
+                '{{forslash}}',
+                '{{toggleAjaxFunction}}'
             ],
             [
                 Helper::getAddress($name),
@@ -55,7 +56,8 @@ class ViewHelper{
                 Helper::layout(),
                 Helper::bodyColClass(),
                 Helper::path(),
-                Helper::forslash()
+                Helper::forslash(),
+                viewHelper::toggleAjaxFunction($name, $fields)
 
             ],
             Helper::getStub('views/index/index.blade')
@@ -69,27 +71,110 @@ class ViewHelper{
         $field_name = '';
         foreach ($fields as $field) {
             $var = explode('*', $field);
-            $field_name = $field_name.'<th scope="col">'.ucfirst(str_replace("_"," ", $var[1])).'</th>';
-            $field_name .= "\n\t\t\t\t\t\t\t\t\t";
+            if($var[0] == 'image'){
+                $field_name = $field_name.'<th scope="col">'.ucfirst(str_replace("_"," ", $var[1])).'</th>';
+                $field_name .= "\n\t\t\t\t\t\t\t\t\t";
+            }
+        }
+        foreach ($fields as $field) {
+            $var = explode('*', $field);
+            if($var[0] != 'image'){
+                $field_name = $field_name.'<th scope="col">'.ucfirst(str_replace("_"," ", $var[1])).'</th>';
+                $field_name .= "\n\t\t\t\t\t\t\t\t\t";
+            }
         }
         return $field_name;
     }
 
     public static function tableBodyFields($name, $fields){
         $fields = explode(',', $fields);
-        $field_name = '';
+        $field_name = "\n";
+        foreach ($fields as $field) {
+            $var = explode('*', $field);
+            if($var[0] == 'image'){
+                $field_name .= str_replace(
+                    [
+                        '{{modelNameSingularVar}}',
+                        '{{fieldNameSigularVar}}'
+                    ],
+                    [
+                        Helper::modelNameSingularVar($name),
+                        Helper::fieldNameSigularVar($var[1])
+                    ],
+                    Helper::getStub("views/index/image.blade")
+                );
+            }
+        }
         foreach ($fields as $field) {
             $var = explode('*', $field);
             if ($var[0] == 'select') {
-                $field_name = $field_name.'<td scope="col">{{ $'.Helper::modelNameSingularVar($name).'->'.$var[1].'->name }}</td>';
-                $field_name .= "\n\t\t\t\t\t\t\t\t\t\t";
+                $field_name .= str_replace(
+                    [
+                        '{{modelNameSingularVar}}',
+                        '{{fieldNameSigularVar}}'
+                    ],
+                    [
+                        Helper::modelNameSingularVar($name),
+                        Helper::fieldNameSigularVar($var[1])
+                    ],
+                    Helper::getStub("views/index/select.blade")
+                );
+            }else if($var[0] == 'image'){
+                $field_name .= '';
+            }else if($var[0] == 'toggle'){
+                $field_name .= str_replace(
+                    [
+                        '{{modelNameSingularVar}}',
+                        '{{fieldNameSigularVar}}'
+                    ],
+                    [
+                        Helper::modelNameSingularVar($name),
+                        Helper::fieldNameSigularVar($var[1])
+                    ],
+                    Helper::getStub("views/index/toggle.blade")
+                );
             }else{
-                $field_name = $field_name.'<td scope="col">{{ $'.Helper::modelNameSingularVar($name).'->'.$var[1].' }}</td>';
-                $field_name .= "\n\t\t\t\t\t\t\t\t\t\t";
-            }
-            
+                $field_name .= str_replace(
+                    [
+                        '{{modelNameSingularVar}}',
+                        '{{fieldNameSigularVar}}'
+                    ],
+                    [
+                        Helper::modelNameSingularVar($name),
+                        Helper::fieldNameSigularVar($var[1])
+                    ],
+                    Helper::getStub("views/index/text.blade")
+                );
+            }            
         }
         return $field_name;
+    }
+
+    public static function toggleAjaxFunction($name, $fields){
+        $fields = explode(',', $fields);
+        $toggle = Helper::getStub("views/extra/toggle-ajax-head.blade");
+        foreach ($fields as $field) {
+            $var = explode('*', $field);
+            if($var[0] == 'toggle'){
+                $toggle .= str_replace(
+                    [
+                        '{{modelNameSingularVar}}',
+                        '{{fieldNameSigularVar}}',
+                        '{{path}}',
+                        '{{forslash}}'
+                    ],
+                    [
+                        Helper::modelNameSingularVar($name),
+                        Helper::fieldNameSigularVar($var[1]),
+                        Helper::path(),
+                        Helper::forslash()
+                    ],
+                    Helper::getStub("views/extra/toggle-ajax-body.blade")
+                );
+            }
+        }
+        $toggle .= Helper::getStub("views/extra/toggle-ajax-footer.blade");
+        return $toggle;
     }
 
 
@@ -98,25 +183,28 @@ class ViewHelper{
 ********************************************************************/
 
     public static function showBladePHP($name, $fields){
+        $fields_without_explode = $fields;
         $fields = explode(',', $fields);
         $viewTemplate = '';
         foreach ($fields as $field) {
-
             $var = explode('*', $field);
             $type = $var[0];
             $input_name = $var[1];
 
-            if ($type != 'select') {
-                $viewTemplateReturn = ViewHelper::showField($name, $type, $input_name);
-            }else{
-                $viewTemplateReturn = ViewHelper::showFieldWithRelationship($name, $type, $input_name);
+            if ($type == 'select') {
+                $viewTemplateReturn = ViewHelper::showFieldWithRelationship($name, $type, $input_name);                
+            }else if ($type == 'toggle') {
+                $viewTemplateReturn = ViewHelper::showFieldToggle($name, $type, $input_name);                
+            }else if($type == 'image'){
+                $viewTemplateReturn = '';
             }
-            
-
+            else{
+                $viewTemplateReturn = ViewHelper::showField($name, $type, $input_name);
+            }
             $viewTemplate = $viewTemplate . $viewTemplateReturn;
         }
         $viewTemplateStart = ViewHelper::show_start($name);
-        $viewTemplateEnd = ViewHelper::show_end($name);
+        $viewTemplateEnd = ViewHelper::show_end($name, $fields, $fields_without_explode);
 
         $viewTemplate =    $viewTemplateStart.$viewTemplate.$viewTemplateEnd;
 
@@ -149,25 +237,52 @@ class ViewHelper{
         return $viewTemplate;
     }
 
-    public static function show_end($name){
+    public static function show_end($name, $fields, $fields_without_explode){
         $viewTemplate = str_replace(
             [
                 '{{address}}',
                 '{{modelNameSingularVar}}',
                 '{{path}}',
-                '{{forslash}}'
+                '{{forslash}}',
+                '{{showImage}}',
+                '{{toggleAjaxFunction}}'
             ],
             [
                 Helper::getAddress($name),
                 Helper::modelNameSingularVar($name),
                 Helper::path(),
-                Helper::forslash()
+                Helper::forslash(),
+                viewHelper::showImage($name, $fields),
+                viewHelper::toggleAjaxFunction($name, $fields_without_explode)
             ],
             Helper::getStub('views/show/show_end.blade')
         );
         return $viewTemplate;
     }
-
+    public static function showImage($name, $fields){
+        $image = '';
+        foreach ($fields as $field) {
+            $var = explode('*', $field);
+            $type = $var[0];
+            $input_name = $var[1];            
+            if ($type == 'image') {
+                $image .= str_replace(
+                    [
+                        '{{modelNameSingularVar}}',
+                        '{{fieldNameSigularVar}}',
+                        '{{inputNameLabel}}'
+                    ],
+                    [
+                        Helper::modelNameSingularVar($name),
+                        Helper::fieldNameSigularVar($input_name),
+                        Helper::inputNameLabel($input_name)
+                    ],
+                    Helper::getStub("views/show/side-image.blade")
+                );
+            }
+        }
+        return $image;
+    }
     public static function showField($name, $type, $input_name){
         $viewTemplate = str_replace(
             [
@@ -181,6 +296,23 @@ class ViewHelper{
                 Helper::inputNameLabel($input_name)
             ],
             Helper::getStub("views/show/show.blade")
+        );
+        return $viewTemplate;
+    }
+
+    public static function showFieldToggle($name, $type, $input_name){
+        $viewTemplate = str_replace(
+            [
+                '{{modelNameSingularVar}}',
+                '{{fieldNameSigularVar}}',
+                '{{inputNameLabel}}'
+            ],
+            [
+                Helper::modelNameSingularVar($name),
+                Helper::fieldNameSigularVar($input_name),
+                Helper::inputNameLabel($input_name)
+            ],
+            Helper::getStub("views/show/toggle.blade")
         );
         return $viewTemplate;
     }
@@ -215,13 +347,12 @@ class ViewHelper{
             $type = $var[0];
             $input_name = $var[1];
 
-
             $viewTemplateReturn = ViewHelper::createTextField($name, $type, $input_name);
 
             $viewTemplate = $viewTemplate . $viewTemplateReturn;
         }
         $viewTemplateStart = ViewHelper::create_start($name);
-        $viewTemplateEnd = ViewHelper::create_end($name);
+        $viewTemplateEnd = ViewHelper::create_end($name, $fields);
 
         $viewTemplate =    $viewTemplateStart.$viewTemplate.$viewTemplateEnd;
 
@@ -256,20 +387,49 @@ class ViewHelper{
         return $viewTemplate;
     }
 
-    public static function create_end($name){
+    public static function create_end($name, $fields){
         $viewTemplate = str_replace(
             [
                 '{{name}}',
+                '{{address}}',
+                '{{createImageUpload}}'
 
             ],
             [
                 $name,
+                Helper::getAddress($name),
+                ViewHelper::createImageUpload($name, $fields),
             ],
             Helper::getStub('views/create/create_end.blade')
         );
         return $viewTemplate;
     }
+    public static function createImageUpload($name, $fields){
+        $image = '';
+        foreach ($fields as $field) {
+            $var = explode('*', $field);
+            $type = $var[0];
+            $input_name = $var[1];            
+            if ($type == 'image') {
+                $image .= str_replace(
+                    [
+                        '{{name}}',
+                        '{{address}}',
+                        '{{fieldNameSigularVar}}',
 
+                    ],
+                    [
+                        $name,
+                        Helper::getAddress($name),
+                        Helper::fieldNameSigularVar($input_name),
+                    ],
+                    Helper::getStub('views/create/side-image.blade')
+                );
+            }
+        }
+        $image .= "@include('includes.crud-file-upload-modal')";
+        return $image;
+    }
     public static function createTextField($name, $type, $input_name){
         $viewTemplate = str_replace(
             [
@@ -278,7 +438,8 @@ class ViewHelper{
                 '{{type}}',
                 '{{inputNameLabel}}',
                 '{{modelNameSingularVar}}',
-                '{{formColClass}}'                
+                '{{formColClass}}',
+                '{{formLabelClass}}'                
             ],
             [
                 Helper::fieldNameSigularVar($input_name),
@@ -286,7 +447,8 @@ class ViewHelper{
                 $type,
                 Helper::inputNameLabel($input_name),
                 Helper::modelNameSingularVar($name),
-                Helper::formColClass(),                
+                Helper::formColClass(), 
+                Helper::formLabelClass(),               
             ],
             Helper::getStub("views/create/{$type}.blade")
         );
@@ -299,7 +461,8 @@ class ViewHelper{
 
     public static function editBladePHP($name, $fields){
         $fields = explode(',', $fields);
-        $viewTemplate = ViewHelper::editTextField($name, 'hidden', 'id');
+        // $viewTemplate = ViewHelper::editTextField($name, 'hidden', 'id');
+        $viewTemplate = '';
         foreach ($fields as $field) {
 
             $var = explode('*', $field);
@@ -312,7 +475,7 @@ class ViewHelper{
             $viewTemplate = $viewTemplate . $viewTemplateReturn;
         }
         $viewTemplateStart = ViewHelper::edit_start($name);
-        $viewTemplateEnd = ViewHelper::edit_end($name);
+        $viewTemplateEnd = ViewHelper::edit_end($name, $fields);
 
         $viewTemplate =    $viewTemplateStart.$viewTemplate.$viewTemplateEnd;
 
@@ -329,7 +492,8 @@ class ViewHelper{
                 '{{inputNameLabel}}',
                 '{{modelNameSingularVar}}',
                 '{{modelNamePluralVar}}',
-                '{{formColClass}}'
+                '{{formColClass}}',
+                '{{formLabelClass}}'
             ],
             [
                 Helper::fieldNameSigularVar($input_name),
@@ -338,7 +502,8 @@ class ViewHelper{
                 Helper::inputNameLabel($input_name),
                 Helper::modelNameSingularVar($name),
                 Helper::modelNamePluralVar($name),
-                Helper::formColClass()
+                Helper::formColClass(),
+                Helper::formLabelClass(),
                 
             ],
             Helper::getStub("views/edit/{$type}.blade")
@@ -372,18 +537,49 @@ class ViewHelper{
         return $viewTemplate;
     }
 
-    public static function edit_end($name){
+    public static function edit_end($name, $fields){
         $viewTemplate = str_replace(
             [
                 '{{name}}',
+                '{{address}}',
+                '{{editImageUpload}}'
 
             ],
             [
                 $name,
+                Helper::getAddress($name),
+                viewHelper::editImageUpload($name, $fields)
             ],
             Helper::getStub('views/edit/edit_end.blade')
         );
         return $viewTemplate;
+    }
+
+    public static function editImageUpload($name, $fields){
+        $image = '';
+        foreach ($fields as $field) {
+            $var = explode('*', $field);
+            $type = $var[0];
+            $input_name = $var[1];            
+            if ($type == 'image') {
+                $image .= str_replace(
+                    [
+                        '{{address}}',
+                        '{{fieldNameSigularVar}}',
+                        '{{modelNameSingularVar}}'
+
+                    ],
+                    [   
+                        Helper::getAddress($name),
+                        Helper::fieldNameSigularVar($input_name),
+                        Helper::modelNameSingularVar($name)
+                    ],
+                    Helper::getStub('views/edit/side-image.blade')
+                );
+            }
+        }
+        $image .= "@include('includes.crud-file-upload-modal')";
+        return $image;
     }
 	
 }

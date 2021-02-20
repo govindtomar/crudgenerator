@@ -1,14 +1,18 @@
-                    	</div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">                                
-                                    <button type="submit" class="btn btn-primary">
-                                        {{ __('Update {{name}}') }}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                    	
                     </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group clearfix">
+                        <button type="submit" class="btn btn-primary float-right" form="{{address}}-form-submit">
+                            <i class="{{ config('crud.save_icon') }}"></i>
+                            {{ __('Save {{name}}') }}
+                        </button>                        
+                    </div>
+                    {{editImageUpload}}
                 </div>
             </div>
         </div> 

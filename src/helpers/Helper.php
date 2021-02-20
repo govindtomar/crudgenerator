@@ -14,6 +14,11 @@ class Helper{
         return file_get_contents(__DIR__."/../stubs/$type.stub");
     }
 
+    public static function code_type(){
+        return config('crud.code_type');
+        // return 'layouts.admin.app';
+    }
+
     public static function layout(){
         return config('crud.layout');
         // return 'layouts.admin.app';
@@ -46,7 +51,10 @@ class Helper{
     }
 
     public static function formColClass(){
-        return 'col-lg-6';
+        return 'col-lg-8';
+    }
+    public static function formLabelClass(){
+        return 'col-lg-4';
     }
 
     public static function getTableName($name){

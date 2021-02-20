@@ -4,14 +4,12 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <div class="{{bodyColClass}}">
+        <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Create New {{modelNameSigularUpperCase}}</h4>
-                    <a href="{{ url('{{path}}{{forslash}}{{address}}') }}" class="btn btn-primary float-right">View All {{modelNamePluralUpperCase}}</a>
+                    <a href="{{ url('{{path}}{{forslash}}{{address}}') }}" class="btn btn-info float-right"><i class="{{ config('crud.back_icon') }}"></i></a>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ url('{{path}}{{forslash}}{{address}}') }}">
-                        <div class="row">
-                            @csrf
-
+                    <form method="POST" action="{{ url('{{path}}{{forslash}}{{address}}') }}" id="{{address}}-form-submit">
+                        @csrf

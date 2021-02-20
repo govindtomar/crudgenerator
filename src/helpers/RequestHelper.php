@@ -36,7 +36,14 @@ class RequestHelper{
             $var = explode('*', $field);
             if ($var[0] == 'select') {
                 $field_name = $field_name."'".$var[1]."_id'  =>  'required',\n\t\t\t";
-            }else{
+            }
+            else if ($var[0] == 'image') {
+                $field_name = $field_name."'".$var[1]."'  =>  '',\n\t\t\t";
+            }
+            else if ($var[0] == 'toggle') {
+                $field_name = $field_name."'".$var[1]."'  =>  '',\n\t\t\t";
+            }
+            else{
                $field_name = $field_name."'".$var[1]."'  =>  'required',\n\t\t\t";
             }
 

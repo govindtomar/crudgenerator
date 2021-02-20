@@ -1,0 +1,5 @@
+										<td scope='col'>
+											<label class='checkbox-inline pl-4'>
+												<input type='checkbox' @if(${{modelNameSingularVar}}->{{fieldNameSigularVar}} == 1) checked @endif data-toggle_id='{{ ${{modelNameSingularVar}}->id }}' data-toggle='toggle' data-onstyle='success' class='{{modelNameSingularVar}}-{{fieldNameSigularVar}}-toggle' data-offstyle='danger' name='{{fieldNameSigularVar}}' data-size='xs'>
+											</label>
+										</td>

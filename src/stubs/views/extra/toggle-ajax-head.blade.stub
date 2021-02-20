@@ -1,0 +1,5 @@
+@section('script-last')
+<script type='text/javascript'>
+jQuery(document).ready(function() {
+	var token = jQuery('meta[name="csrf-token"]').attr('content')
+	var site_url = jQuery('meta[name="site-url"]').attr('content')

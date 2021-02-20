@@ -8,7 +8,7 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">{{modelNamePluralUpperCase}}</h4>
-                    <a href="{{ url('{{path}}{{forslash}}{{address}}/create') }}" class="btn btn-primary float-right">+ Add {{modelNameSigularUpperCase}}</a>
+                    <a href="{{ url('{{path}}{{forslash}}{{address}}/create') }}" class="btn btn-primary float-right"><i class="{{ config('crud.plus_icon') }}"></i> Add {{modelNameSigularUpperCase}}</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -21,33 +21,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php
-                                    $table_counter = 1;
-                                @endphp
-                                @foreach (${{modelNamePluralVar}} as ${{modelNameSingularVar}})
+                                @foreach (${{modelNamePluralVar}} as $key => ${{modelNameSingularVar}})
                                     <tr>
-                                        <th>{{ $table_counter }}</th>
+                                        <th>{{ $key+1 }}</th>
                                         {{tableBodyFields}}
                                         <td>
                                             <ul style="display: inline-flex;">
                                                 <li>
-                                                    <a href="{{ url('{{path}}{{forslash}}{{address}}/'. ${{modelNameSingularVar}}->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
+                                                    <a href="{{ url('{{path}}{{forslash}}{{address}}/'. ${{modelNameSingularVar}}->id) }}" class="btn btn-info btn-sm"><i class="{{ config('crud.show_icon') }}"></i></a>
                                                 </li>
                                                 <li>
-                                                    <a href="{{ url('{{path}}{{forslash}}{{address}}/'. ${{modelNameSingularVar}}->id.'/edit') }}" class="btn btn-success btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                                    <a href="{{ url('{{path}}{{forslash}}{{address}}/'. ${{modelNameSingularVar}}->id.'/edit') }}" class="btn btn-success btn-sm"><i class="{{ config('crud.edit_icon') }}"></i></a>
                                                 </li>
                                                 <li>
-                                                    <form id="back-delete-form" action="{{ url('{{path}}{{forslash}}{{address}}', [${{modelNameSingularVar}}->id]) }}" method="POST">
+                                                    <form action="{{ url('{{path}}{{forslash}}{{address}}', [${{modelNameSingularVar}}->id]) }}" method="POST">
                                                       @csrf
                                                       {{method_field('DELETE')}}
-                                                      <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
+                                                      <button type="submit" class="btn btn-danger btn-sm"><i class="{{ config('crud.delete_icon') }}"></i></button>
                                                     </form>
                                                 </li>
                                             </ul>
                                         </td>
-                                        @php
-                                            $table_counter = $table_counter + 1 ;
-                                        @endphp
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -62,3 +56,5 @@
     </div>
 </div>
 @endsection
+
+{{toggleAjaxFunction}}

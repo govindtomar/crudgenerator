@@ -29,7 +29,8 @@ class ControllerHelper{
                     '{{path}}',
                     '{{backslash}}',
                     '{{forslash}}',
-                    '{{relativeModel}}'
+                    '{{relativeModel}}',
+                    '{{createExtraFunctionForToggle}}'
 
                 ],
                 [
@@ -49,6 +50,7 @@ class ControllerHelper{
                     Helper::backslash(),
                     Helper::forslash(),
                     ControllerHelper::relativeModel($tables),
+                    ControllerHelper::createExtraFunctionForToggle($name, $fields)
 
                 ],
                 Helper::getStub('controllers/CompactController')
@@ -70,7 +72,8 @@ class ControllerHelper{
                     '{{namespace}}',
                     '{{path}}',
                     '{{backslash}}',
-                    '{{forslash}}'
+                    '{{forslash}}',
+                    '{{createExtraFunctionForToggle}}'
                 ],
                 [
                     $name,
@@ -84,7 +87,8 @@ class ControllerHelper{
                     Helper::namespace(),
                     Helper::path(),
                     Helper::backslash(),
-                    Helper::forslash()
+                    Helper::forslash(),
+                    ControllerHelper::createExtraFunctionForToggle($name, $fields)
                 ],
                 Helper::getStub('controllers/Controller')
             );
@@ -101,8 +105,17 @@ class ControllerHelper{
             $var = explode('*', $field);
             if ($var[0] == 'select') {
                 $field_name .= '_____'.Helper::modelNameSingularVar($name)."->".$var[1]."_id  =  _____request->{$var[1]}_id;\n\t\t\t";
-            }else{
-               $field_name .= '_____'.Helper::modelNameSingularVar($name)."->".$var[1]."  =  _____request->$var[1];\n\t\t\t";
+            }
+            else if($var[0] == 'image'){
+                $field_name .=  "if(_____request->".$var[1]." != ''){\n\t\t\t\t";
+                $field_name .= '_____'.Helper::modelNameSingularVar($name)."->".$var[1]."  = CRUDHelper::file_upload(_____request->".$var[1].", 'uploads/user-'.Auth::id());\n\t\t\t";
+                $field_name .=  "}\n\t\t\t";
+            }
+            else if($var[0] == 'toggle'){
+
+            }
+            else{
+                $field_name .= '_____'.Helper::modelNameSingularVar($name)."->".$var[1]."  =  _____request->$var[1];\n\t\t\t";
             }
 
         }
@@ -129,6 +142,30 @@ class ControllerHelper{
         return $table_name;
     }
 
+    public static function createExtraFunctionForToggle($name, $fields){
+        $fields = explode(',', $fields);
+        $field_name = "\n";
+        foreach ($fields as $field) {
+            $var = explode('*', $field);
+            if($var[0] == 'toggle'){
+                $field_name .= str_replace(
+                    [
+                        '{{name}}',
+                        '{{fieldNameSigularVar}}',
+                        '{{modelNameSingularVar}}'
+
+                    ],
+                    [
+                        $name,
+                        Helper::fieldNameSigularVar($var[1]),
+                        Helper::modelNameSingularVar($name),
+                    ],
+                    Helper::getStub('controllers/create-function-for-toggle.blade')
+                );
+            }
+        }
+        return $field_name;
+    }
 
     public static function getExtraTables($tables){
         $tables = explode(',', $tables);

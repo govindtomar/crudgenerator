@@ -19,10 +19,10 @@ class AdminCrudGenerator extends Command
      *
      * @var string
      */
-    protected $signature = 'crud:backend
+    protected $signature = 'make:crud
                         {name : Class (singular), e.g User}
                         {--fields= : Field names for the form & migration.}
-                        {--tables= : Tables for select option}
+                        {--model= : Tables for select option}
                         {--migration= : Tables for select option}
                         ';
 
@@ -52,7 +52,7 @@ class AdminCrudGenerator extends Command
     {
         $name = $this->argument('name');
         $fields = $this->option('fields');
-        $tables = $this->option('tables');
+        $tables = $this->option('model');
         $migration = $this->option('migration');
 
 
@@ -68,11 +68,19 @@ class AdminCrudGenerator extends Command
             mkdir(app_path("/Models"));
         }
 
-        if(!file_exists(resource_path("views".Helper::forslash().Helper::path()))){
-            mkdir(resource_path("views".Helper::forslash().Helper::path()));
+        if (Helper::code_type() != 'API') { 
+
+            if(!file_exists(resource_path("views".Helper::forslash().Helper::path()))){
+                mkdir(resource_path("views".Helper::forslash().Helper::path()));
+            }
+
+            File::deleteDirectory(resource_path("views".Helper::forslash().Helper::path()."/".Helper::getAddress($name)));
+
+            ViewHelper::view($name, $fields);
         }
 
-        File::deleteDirectory(resource_path("views".Helper::forslash().Helper::path()."/".Helper::getAddress($name)));
+        
+
         File::delete(app_path("/Models/{$name}.php"));
         File::delete(app_path("/Http/Controllers".Helper::forslash().Helper::namespace()."/{$name}Controller.php"));
         File::delete(app_path("/Http/Requests/{$name}Request.php"));
@@ -83,9 +91,12 @@ class AdminCrudGenerator extends Command
 
         ModelHelper::model($name, $fields, $tables);
 
-        ViewHelper::view($name, $fields);
-
-        $this->routes($name);
+        if (Helper::code_type() != 'API') {
+            $this->routes($name, $fields);
+        }else{
+            $this->api_routes($name, $fields);
+        }
+        
 
         if ($migration == 'y' || $migration == 'yes') {
             $this->migration($name);
@@ -101,39 +112,74 @@ class AdminCrudGenerator extends Command
     }
 
 
-    protected function routes($name)
+    protected function routes($name, $fields)
     {
         $route_page = base_path('routes/web.php');
         
         File::append(base_path('routes/web.php'), 
             "\n\n // $name Controller Routes \n");
 
+        File::append($route_page, 
+            "Route::group(['prefix' => '".Helper::path()."', 'as' => '".Helper::path().".', 'namespace' => '".Helper::namespace()."', 'middleware' => 'permission'], function(){\n");
+
+        File::append($route_page, 
+            "\tRoute::resource('".Helper::getAddress($name)."', '".$name."Controller');\n");
+        $fields = explode(',', $fields);
+        foreach ($fields as $field) {
+            $var = explode('*', $field);
+            if($var[0] == 'toggle'){
+                File::append($route_page, "\tRoute::post('".Helper::getAddress($name)."/".$var[1]."', '".$name."Controller@".$var[1]."')->name('".Helper::getAddress($name).".".$var[1]."');\n");
+            }
+        }
+        File::append($route_page, 
+            "});");
         // File::append($route_page, 
-        //     "Route::group(['namespace' => '".Helper::namespace().Helper::backslash()"'], function(){\n");
+        //     "\tRoute::get('".Helper::path().Helper::forslash().Helper::getAddress($name)."/create', '".Helper::namespace().Helper::backslash().$name."Controller@create')->name('".Helper::path().".".Helper::getAddress($name)."."."create');\n");
+
+        // File::append($route_page, 
+        //     "\tRoute::post('".Helper::path().Helper::forslash().Helper::getAddress($name)."', '".Helper::namespace().Helper::backslash().$name."Controller@store')->name('".Helper::path().".".Helper::getAddress($name)."."."store');\n");
+
+        // File::append($route_page, 
+        //     "\tRoute::get('".Helper::path().Helper::forslash().Helper::getAddress($name)."', '".Helper::namespace().Helper::backslash().$name."Controller@index')->name('".Helper::path().".".Helper::getAddress($name)."."."index');\n");
+
+        // File::append($route_page, 
+        //     "\tRoute::get('".Helper::path().Helper::forslash().Helper::getAddress($name)."/{id}', '".Helper::namespace().Helper::backslash().$name."Controller@show')->name('".Helper::path().".".Helper::getAddress($name)."."."show');\n");
+
+        // File::append($route_page, 
+        //     "\tRoute::get('".Helper::path().Helper::forslash().Helper::getAddress($name)."/{id}/edit', '".Helper::namespace().Helper::backslash().$name."Controller@edit')->name('".Helper::path().".".Helper::getAddress($name)."."."edit');\n");
+
+        // File::append($route_page, 
+        //     "\tRoute::put('".Helper::path().Helper::forslash().Helper::getAddress($name)."', '".Helper::namespace().Helper::backslash().$name."Controller@update')->name('".Helper::path().".".Helper::getAddress($name)."."."update');\n");
+
+        // File::append($route_page, 
+        //     "\tRoute::delete('".Helper::path().Helper::forslash().Helper::getAddress($name)."/{id}','".Helper::namespace().Helper::backslash().$name."Controller@destroy')->name('".Helper::path().".".Helper::getAddress($name)."."."destroy');\n");
+
         
-        File::append($route_page, 
-            "\tRoute::get('".Helper::path().Helper::forslash().Helper::getAddress($name)."/create', '".Helper::namespace().Helper::backslash().$name."Controller@create');\n");
+    }
+
+
+    protected function api_routes($name, $fields)
+    {
+        $route_page = base_path('routes/api.php');
+        
+        File::append(base_path('routes/web.php'), 
+            "\n\n // $name Controller Routes \n");
 
         File::append($route_page, 
-            "\tRoute::post('".Helper::path().Helper::forslash().Helper::getAddress($name)."', '".Helper::namespace().Helper::backslash().$name."Controller@store');\n");
+            "Route::group(['prefix' => '".Helper::path()."', 'as' => '".Helper::path().".', 'namespace' => '".Helper::namespace()."', 'middleware' => 'permission'], function(){\n");
 
         File::append($route_page, 
-            "\tRoute::get('".Helper::path().Helper::forslash().Helper::getAddress($name)."', '".Helper::namespace().Helper::backslash().$name."Controller@index');\n");
-
+            "\tRoute::resource('".Helper::getAddress($name)."', '".$name."Controller');\n");
+        $fields = explode(',', $fields);
+        foreach ($fields as $field) {
+            $var = explode('*', $field);
+            if($var[0] == 'toggle'){
+                File::append($route_page, "\tRoute::post('".Helper::getAddress($name)."/".$var[1]."', '".$name."Controller@".$var[1]."')->name('".Helper::getAddress($name).".".$var[1]."');\n");
+            }
+        }
         File::append($route_page, 
-            "\tRoute::get('".Helper::path().Helper::forslash().Helper::getAddress($name)."/{id}', '".Helper::namespace().Helper::backslash().$name."Controller@show');\n");
-
-        File::append($route_page, 
-            "\tRoute::get('".Helper::path().Helper::forslash().Helper::getAddress($name)."/{id}/edit', '".Helper::namespace().Helper::backslash().$name."Controller@edit');\n");
-
-        File::append($route_page, 
-            "\tRoute::put('".Helper::path().Helper::forslash().Helper::getAddress($name)."', '".Helper::namespace().Helper::backslash().$name."Controller@update');\n");
-
-        File::append($route_page, 
-            "\tRoute::delete('".Helper::path().Helper::forslash().Helper::getAddress($name)."/{id}','".Helper::namespace().Helper::backslash().$name."Controller@destroy');\n");
-
-        // File::append($route_page, 
-        //     "});");
+            "});");
+       
     }
 
 }

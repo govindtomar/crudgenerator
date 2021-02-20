@@ -4,9 +4,10 @@ namespace App\Http\Controllers{{backslash}}{{namespace}};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\{{modelName}}Request;
+use GovindTomar\CrudGenerator\Helpers\CRUDHelper;
 use App\Models\{{modelName}};
 use DB;
-
+use Auth;
 
 class {{modelName}}Controller extends Controller
 {
@@ -32,8 +33,10 @@ class {{modelName}}Controller extends Controller
     public function store({{modelName}}Request $request)
     {
         try{
-            ${{modelNameSingularVar}} = {{modelName}}::create($request->all());
-            return back()->with('success','You have successfully inserted new {{modelNameSingularLowerCase}}');
+            ${{modelNameSingularVar}} = new {{modelName}};
+            {{createControllerFields}}
+            ${{modelNameSingularVar}}->save();
+            return redirect('{{path}}{{forslash}}{{address}}/'.${{modelNameSingularVar}}->id)->with('success', 'You have successfully inserted new {{modelNameSingularLowerCase}}');
         }catch(\Exception $e){
             return back()->with('error','Your record has been not submitted successfully ');
         }
@@ -60,10 +63,10 @@ class {{modelName}}Controller extends Controller
 
     }
 
-    public function update({{modelName}}Request $request)
+    public function update({{modelName}}Request $request, $id)
     {
         try{
-            ${{modelNameSingularVar}} =  {{modelName}}::find($request->id);
+            ${{modelNameSingularVar}} =  {{modelName}}::find($id);
             {{createControllerFields}}
             ${{modelNameSingularVar}}->save();
             
@@ -83,6 +86,6 @@ class {{modelName}}Controller extends Controller
             return back()->with('error','{{modelNameSingularLowerCase}} was delete');
         }
     }
-
+    {{createExtraFunctionForToggle}}
 
 }
