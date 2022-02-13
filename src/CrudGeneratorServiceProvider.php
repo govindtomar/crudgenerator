@@ -10,17 +10,16 @@ class CrudGeneratorServiceProvider extends ServiceProvider
 	public function boot(){
 		$this->loadRoutesFrom(__DIR__.'/routes/web.php');
 
-        $this->loadViewsFrom(__DIR__.'/views', 'views');
+        $this->loadViewsFrom(__DIR__.'/views', 'crudgenerator');
 
-        $this->mergeConfigFrom(__DIR__.'/config/crud.php', 'crud');
+        $this->mergeConfigFrom(__DIR__.'/config/gt-crud.php', 'gt-crud');
 
-        $this->publishes([__DIR__.'/config/crud.php' => config_path('crud.php')], 'config');
+        $this->publishes([__DIR__.'/config/gt-crud.php' => config_path('gt-crud.php')], 'config');
         $this->publishes([__DIR__.'/views' => resource_path('views')], 'views');
 
         if ($this->app->runningInConsole()) {
             $this->commands([
                 AdminCrudGenerator::class,
-                // BarCommand::class,
             ]);
         }
 	}

@@ -520,7 +520,8 @@ class ViewHelper{
                 '{{layout}}',
                 '{{bodyColClass}}',
                 '{{path}}',
-                '{{forslash}}'
+                '{{forslash}}',
+                '{{modelNameSingularVar}}'
 
             ],
             [
@@ -530,7 +531,8 @@ class ViewHelper{
                 Helper::layout(),
                 Helper::bodyColClass(),
                 Helper::path(),
-                Helper::forslash()
+                Helper::forslash(),
+                Helper::modelNameSingularVar($name),
             ],
             Helper::getStub('views/edit/edit_start.blade')
         );
