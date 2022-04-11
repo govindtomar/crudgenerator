@@ -63,12 +63,12 @@ class AdminCrudGenerator extends Command
             File::delete(app_path("/Http/Controllers".Helper::forslash().Helper::namespace()."/{$name}Controller.php"));
             File::delete(app_path("/Http/Requests/{$name}Request.php"));
             ActionHelper::delete_current_table($name);
-            
-            if (Helper::code_type() != 'API') { 
+
+            if (Helper::code_type() != 'API') {
                 File::deleteDirectory(resource_path("views".Helper::forslash().Helper::path()."/".Helper::getAddress($name)));
             }
             return false;
-        }  
+        }
 
         if(!file_exists(app_path('/Http/Controllers'.Helper::forslash().Helper::namespace()))){
             mkdir(app_path("/Http/Controllers".Helper::forslash().Helper::namespace()));
@@ -82,7 +82,7 @@ class AdminCrudGenerator extends Command
             mkdir(app_path("/Models"));
         }
 
-        if (Helper::code_type() != 'API') { 
+        if (Helper::code_type() != 'API') {
 
             if(!file_exists(resource_path("views".Helper::forslash().Helper::path()))){
                 mkdir(resource_path("views".Helper::forslash().Helper::path()));
@@ -93,7 +93,7 @@ class AdminCrudGenerator extends Command
             ViewHelper::view($name, $fields);
         }
 
-        
+
 
         File::delete(app_path("/Models/{$name}.php"));
         File::delete(app_path("/Http/Controllers".Helper::forslash().Helper::namespace()."/{$name}Controller.php"));
@@ -110,10 +110,10 @@ class AdminCrudGenerator extends Command
         }else{
             ActionHelper::api_routes($name, $fields);
         }
-        
+
         if ($migration == 'y' || $migration == 'yes') {
             ActionHelper::migration($name, $fields, $tables);
-        }       
+        }
 
     }
 

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\File;
 use GovindTomar\CrudGenerator\Helpers\Helper;
 
 class ControllerHelper{
-	
+
 	public static function controller($name, $fields, $tables)
     {
         if (isset($tables)) {
@@ -126,7 +126,7 @@ class ControllerHelper{
         $tables = explode(',', $tables);
         $table_name = '';
         foreach ($tables as $key => $table) {
-            $table_name .=  "'".Helper::modelNameSingularLowerCase($table)."',";
+            $table_name .=  "'".Helper::modelNameSingularVar($table)."',";
         }
         return substr($table_name, 0, -1);
     }
@@ -194,7 +194,7 @@ class ControllerHelper{
         $tables = explode(',', $tables);
         $relate = '';
         foreach ($tables as $key => $table) {
-           $relate .= 'use App\Models'.Helper::backslash().$table.';'; 
+           $relate .= 'use App\Models'.Helper::backslash().$table.';';
         }
         return $relate;
     }

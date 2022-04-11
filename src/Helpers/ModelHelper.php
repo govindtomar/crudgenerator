@@ -47,7 +47,7 @@ class ModelHelper{
             }
         return str_replace('_____', '$', $relation);
         }
-    } 
+    }
 
 
     public static function getModelFields($fields){
@@ -68,16 +68,20 @@ class ModelHelper{
 
 
     public static function relation_model($name, $table){
-        
-        $relation = "\tpublic function ". Helper::modelNamePluralVar($name)."(){\n\t\t"."return _____this->hasMany({$name}::class);\n\t"."}\n\n}";
 
-        $content = str_replace('_____', '$', $relation);
-        // dd(app_path("Models/{$table}.php"));
-        if(file_exists(app_path("Models/{$table}.php"))){
-            $old_content = file_get_contents(app_path("Models/{$table}.php"));
-            file_put_contents(app_path("Models/{$table}.php"), substr($old_content, 0, -1).$content);
+        $model_page = base_path('app/Models/'.$table.'.php');
+        $model_exists = ActionHelper::string_match($model_page, Helper::modelNameSingularVar($name));
+        if($model_exists == false){
+            $relation = "\tpublic function ". Helper::modelNamePluralVar($name)."(){\n\t\t"."return _____this->hasMany({$name}::class);\n\t"."}\n\n}";
+            $content = str_replace('_____', '$', $relation);
+            if(file_exists(app_path("Models/{$table}.php"))){
+                $old_content = file_get_contents(app_path("Models/{$table}.php"));
+                file_put_contents(app_path("Models/{$table}.php"), substr($old_content, 0, -2).$content);
+            }
         }
-        
+
     }
 
 }
+
+

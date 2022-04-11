@@ -8,7 +8,7 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Edit {{modelNameSigularUpperCase}}</h4>
-                    <a href="{{ url('{{path}}{{forslash}}{{address}}') }}" class="btn btn-info float-right"><i class="{{ config('crud.back_icon') }}"></i></a>
+                    <a href="{{ url('{{path}}{{forslash}}{{address}}') }}" class="btn btn-info float-right"><i class="{{ config('gt-crud.back_icon') }}"></i></a>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ url('{{path}}{{forslash}}{{address}}/'.${{modelNameSingularVar}}->id) }}" id="{{address}}-form-submit">

@@ -15,35 +15,35 @@ class Helper{
     }
 
     public static function code_type(){
-        return config('crud.code_type');
+        return config('gt-crud.code_type');
         // return 'layouts.admin.app';
     }
 
     public static function layout(){
-        return config('crud.layout');
+        return config('gt-crud.layout');
         // return 'layouts.admin.app';
     }
 
     public static function path(){
-        return config('crud.path');
+        return config('gt-crud.path');
         // return 'admin';
     }
 
     public static function namespace(){
-        return config('crud.namespace');
+        return config('gt-crud.namespace');
         // return 'Admin';
     }
 
     public static function backslash(){
-        if (config('crud.backslash') != '') {
-            return explode('"', config('crud.backslash'))[0];            
+        if (config('gt-crud.backslash') != '') {
+            return explode('"', config('gt-crud.backslash'))[0];
         }else{
             return '';
         }
     }
 
     public static function forslash(){
-        return config('crud.forslash');
+        return config('gt-crud.forslash');
     }
 
     public static function bodyColClass(){
@@ -163,3 +163,6 @@ class Helper{
     }
 
 }
+
+
+
