@@ -2,6 +2,7 @@
 
 return [
 
+    // for api use code type is "API"
     'code_type' => '',
     
     'layout'  =>  'layouts.gt-crud',
@@ -15,7 +16,7 @@ return [
     'forslash'	=>	'/',
 
     'trash_path'	=>	'uploads/trash',
-
+    
     'show_icon'		=>	'bx bx-show',
 	'edit_icon'		=>	'bx bx-edit',
 	'delete_icon'	=>	'bx bx-x',

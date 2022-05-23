@@ -70,7 +70,7 @@ class {{modelName}}Controller extends Controller
             {{createControllerFields}}
             ${{modelNameSingularVar}}->save();
             
-            return back()->with('success','You have successfully updated {{modelNameSingularLowerCase}}');
+            return redirect('{{path}}{{forslash}}{{address}}/'.${{modelNameSingularVar}}->id)->with('success', 'You have successfully updated {{modelNameSingularLowerCase}}');
         }catch(\Exception $e){
             return back()->with('error','Your record has been not updated successfully');
         }
