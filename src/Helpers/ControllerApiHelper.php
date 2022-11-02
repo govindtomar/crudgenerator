@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use GovindTomar\CrudGenerator\Helpers\Helper;
 
-class ControllerHelper{
+class ControllerApiHelper{
 	
 	public static function controller($name, $fields, $tables)
     {
@@ -53,7 +53,7 @@ class ControllerHelper{
                     ControllerHelper::createExtraFunctionForToggle($name, $fields)
 
                 ],
-                Helper::getStub('controllers/CompactController')
+                Helper::getStub('controllers/CompactControllerApi')
             );
 
             file_put_contents(app_path("/Http/Controllers/".Helper::namespace()."/{$name}Controller.php"), $controllerTemplate);
@@ -90,7 +90,7 @@ class ControllerHelper{
                     Helper::forslash(),
                     ControllerHelper::createExtraFunctionForToggle($name, $fields)
                 ],
-                Helper::getStub('controllers/Controller')
+                Helper::getStub('controllers/ControllerApi')
             );
 
             file_put_contents(app_path("/Http/Controllers/".Helper::namespace()."/{$name}Controller.php"), $controllerTemplate);

@@ -6,16 +6,16 @@
                 <div class="card-body">
                     <ul style="display: inline-flex; float:right;">
                         <li>
-                            <a href="{{ url('{{path}}{{forslash}}{{address}}/create') }}" class="btn btn-primary"><i class="{{ config('gt-crud.plus_icon') }}"></i></a>
+                            <a href="{{ url('{{path}}{{forslash}}{{address}}/create') }}" class="btn btn-primary"><i class="{{ config('crud.plus_icon') }}"></i></a>
                         </li>
                         <li>
-                            <a href="{{ url('{{path}}{{forslash}}{{address}}/'. ${{modelNameSingularVar}}->id.'/edit') }}" class="btn btn-success"><i class="{{ config('gt-crud.edit_icon') }}"></i></a>
+                            <a href="{{ url('{{path}}{{forslash}}{{address}}/'. ${{modelNameSingularVar}}->id.'/edit') }}" class="btn btn-success"><i class="{{ config('crud.edit_icon') }}"></i></a>
                         </li>
                         <li>
                             <form id="back-delete-form" action="{{ url('{{path}}{{forslash}}{{address}}', [${{modelNameSingularVar}}->id]) }}" method="POST">
                                 @csrf
                                 {{method_field('DELETE')}}
-                                <button type="submit" class="btn btn-danger"><i class="{{ config('gt-crud.delete_icon') }}"></i></button>
+                                <button type="submit" class="btn btn-danger"><i class="{{ config('crud.delete_icon') }}"></i></button>
                             </form>
                         </li>
                     </ul>

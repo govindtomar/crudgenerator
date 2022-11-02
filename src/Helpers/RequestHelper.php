@@ -25,7 +25,7 @@ class RequestHelper{
                 Helper::getStub('requests/Request')
             );
 
-            file_put_contents(app_path("/Http/Requests/{$name}Request.php"), $requestTemplate);
+            file_put_contents(app_path("/Http/Requests/".Helper::forslash().Helper::namespace()."/{$name}Request.php"), $requestTemplate);
        
     }
 

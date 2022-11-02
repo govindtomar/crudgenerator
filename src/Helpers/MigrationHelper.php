@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\File;
 use GovindTomar\CrudGenerator\Helpers\Helper;
 
 class MigrationHelper{
-
+	
     public static function migration($name, $fields, $tables)
     {
             $requestTemplate = str_replace(
@@ -26,42 +26,31 @@ class MigrationHelper{
             );
 
             file_put_contents(database_path("/migrations"."/".date('Y_m_d_His')."_create_".Helper::modelNamePluralVar($name)."_table.php"), $requestTemplate);
-
+       
     }
 
 
     public static function getMigrationFields($name, $fields, $tables){
         $fields = explode(',', $fields);
-        $tables = explode(',', $tables);
         $field_name = '';
 
         foreach ($fields as $field) {
             $var = explode('*', $field);
-            if ($var[0] == 'select') {
-                if (isset($tables)) {
-                    foreach ($tables as $key => $table) {
-                        // dd($var[1] ."||||". Helper::modelNameSingularVar($table));
-                        if($var[1] == Helper::modelNameSingularVar($table)){
-                            $field_name .= "_____table->unsignedBigInteger('".Helper::modelNameSingularVar($table)."_id');\n\t\t\t";
-                            $field_name .= "_____table->foreign('".Helper::modelNameSingularVar($table)."_id')->references('id')->on('".Helper::getTableName($table)."')->onDelete('cascade');\n\t\t\t";
-                        }
-                    }
-                }
-
+            if ($var[0] != 'select' || $var[0] != 'toggle') {
+                $field_name .= "_____table->string('$var[1]');\n\t\t\t";
             }
             else if($var[0] == 'toggle'){
-                $field_name .= "_____table->tinyInteger('$var[1]')->default(1);\n\t\t\t";
-            }else{
-                $field_name .= "_____table->string('$var[1]');\n\t\t\t";
+                $field_name .= "_____table->tinyInteger('$var[1]');\n\t\t\t";
             }
         }
 
-        // if (isset($tables)) {
-        //     foreach ($tables as $key => $table) {
-        //         $field_name .= "_____table->unsignedBigInteger('".Helper::modelNameSingularVar($table)."_id');\n\t\t\t";
-        //         $field_name .= "_____table->foreign('".Helper::modelNameSingularVar($table)."_id')->references('id')->on('".Helper::getTableName($table)."')->onDelete('cascade');\n\t\t\t";
-        //     }
-        // }
+        if (isset($tables)) {
+            $tables = explode(',', $tables);
+            foreach ($tables as $key => $table) {
+                $field_name .= "_____table->unsignedBigInteger('".Helper::modelNameSingularVar($table)."_id');\n\t\t\t"; 
+                $field_name .= "_____table->foreign('".Helper::modelNameSingularVar($table)."_id')->references('id')->on('".Helper::getTableName($table)."')->onDelete('cascade');\n\t\t\t";
+            }
+        }
 
 
         return str_replace('_____', '$', substr($field_name, 0, -4));

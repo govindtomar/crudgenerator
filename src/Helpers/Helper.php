@@ -36,7 +36,7 @@ class Helper{
 
     public static function backslash(){
         if (config('gt-crud.backslash') != '') {
-            return explode('"', config('gt-crud.backslash'))[0];
+            return explode('"', config('gt-crud.backslash'))[0];            
         }else{
             return '';
         }
@@ -163,6 +163,3 @@ class Helper{
     }
 
 }
-
-
-

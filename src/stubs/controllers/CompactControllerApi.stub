@@ -1,0 +1,91 @@
+<?php
+namespace App\Http\Controllers{{backslash}}{{namespace}};
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\ApiController;
+use App\Http\Requests\V1\{{modelName}}Request;
+use GovindTomar\CrudGenerator\Helpers\CRUDHelper;
+use App\Models\{{modelName}};
+use Auth;
+{{relativeModel}}
+
+class {{modelName}}Controller extends ApiController
+{
+    public function index()
+    {
+        try{
+            ${{modelNamePluralVar}}  = {{modelName}}::with({{indexWithModel}})->paginate(20);
+            return $this->response([
+                'status' => $this->getStatusCode(),
+                'message' => '{{modelName}} lists',
+                'data' =>  ${{modelNamePluralVar}},
+            ]);
+        }catch(\Exception $e){
+            return $this->errorResponse($e->getMessage());
+        }
+    }
+
+    public function store({{modelName}}Request $request)
+    {
+        try{            
+            ${{modelNameSingularVar}} = new {{modelName}};
+            {{createControllerFields}}
+            ${{modelNameSingularVar}}->save();
+            return $this->response([
+                'status' => $this->getStatusCode(),
+                'message' => 'Save {{modelName}}',
+                'data' =>  ${{modelNameSingularVar}},
+            ]);
+        }catch(\Exception $e){
+            return $this->errorResponse($e->getMessage());
+        }
+    }
+
+    public function show($id)
+    {
+        try{
+            ${{modelNameSingularVar}} = {{modelName}}::find($id);
+            return $this->response([
+                'status' => $this->getStatusCode(),
+                'message' => 'Show {{modelName}}',
+                'data' =>  ${{modelNameSingularVar}},
+            ]);
+        }catch(\Exception $e){
+            return $this->errorResponse($e->getMessage());
+        }
+    }
+
+
+    public function update({{modelName}}Request $request)
+    {
+        try{
+            ${{modelNameSingularVar}} =  {{modelName}}::find($request->id);
+            {{createControllerFields}}
+            ${{modelNameSingularVar}}->save();
+
+            return $this->response([
+                'status' => $this->getStatusCode(),
+                'message' => 'Update {{modelName}}',
+                'data' =>  ${{modelNameSingularVar}},
+            ]);
+        }catch(\Exception $e){
+            return $this->errorResponse($e->getMessage());
+        }
+    }
+
+    public function destroy($id)
+    {
+        try{
+            ${{modelNameSingularVar}} = {{modelName}}::find($id)->delete();
+            return $this->response([
+                'status' => $this->getStatusCode(),
+                'message' => 'Delete {{modelName}}',
+                'data' =>  ${{modelNameSingularVar}},
+            ]);
+        }catch(\Exception $e){
+            return $this->errorResponse($e->getMessage());
+        }
+    }
+
+    {{createExtraFunctionForToggle}}
+}
